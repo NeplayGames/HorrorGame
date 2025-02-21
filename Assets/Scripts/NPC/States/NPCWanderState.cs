@@ -2,33 +2,38 @@ using HorrorGame.NPC;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCWanderState : IState
+namespace HorrorGame.NPC
 {
-    private NavMeshAgent navMeshAgent;
-
-    public NPCWanderState(NavMeshAgent navMeshAgent)
+    public class NPCWanderState : IState
     {
-        this.navMeshAgent = navMeshAgent;
-    }
+        private NavMeshAgent navMeshAgent;
 
-    public void Enter()
-    {    
-          GotoAPoint(); 
-    }
+        public NPCWanderState(NavMeshAgent navMeshAgent)
+        {
+            this.navMeshAgent = navMeshAgent;
+        }
 
-    public void Exit()
-    {
-    }
-
-    public void Run()
-    {
-        if(navMeshAgent.velocity.magnitude == 0){
+        public void Enter()
+        {
             GotoAPoint();
         }
-    }
 
-    private void GotoAPoint(){
-        Vector3 point = Random.insideUnitSphere * 5;
-        this.navMeshAgent.SetDestination(point);
+        public void Exit()
+        {
+        }
+
+        public void Run()
+        {
+            if (navMeshAgent.velocity.magnitude == 0)
+            {
+                GotoAPoint();
+            }
+        }
+
+        private void GotoAPoint()
+        {
+            Vector3 point = Random.insideUnitSphere * 5;
+            this.navMeshAgent.SetDestination(point);
+        }
     }
 }

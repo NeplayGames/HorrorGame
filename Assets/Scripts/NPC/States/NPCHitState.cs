@@ -1,4 +1,3 @@
-using HorrorGame.NPC;
 using UnityEngine;
 
 namespace HorrorGame.NPC

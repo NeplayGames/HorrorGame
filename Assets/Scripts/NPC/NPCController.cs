@@ -1,5 +1,3 @@
-using System;
-using HorrorGame;
 using UnityEngine;
 using UnityEngine.AI;
 

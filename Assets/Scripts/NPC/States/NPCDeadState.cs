@@ -1,20 +1,23 @@
-using HorrorGame.NPC;
 using UnityEngine;
 
-public class NPCDeadState : IState
+namespace HorrorGame.NPC
 {
-    public void Enter()
+    public class NPCDeadState : IState
     {
-        Debug.Log("dead state");
+        public void Enter()
+        {
+            Debug.Log("dead state");
+        }
+
+        public void Exit()
+        {
+
+        }
+
+        public void Run()
+        {
+
+        }
     }
 
-    public void Exit()
-    {
-        
-    }
-
-    public void Run()
-    {
-       
-    }
 }
