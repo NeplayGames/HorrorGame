@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +10,8 @@ namespace HorrorGame.NPC
         public int health = 100;
         public float hitTime = 2;
         private NPCStateMachine nPCStateMachine;
+
+        public event Action OnPlayerDead;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -29,6 +32,8 @@ namespace HorrorGame.NPC
             nPCStateMachine.ChangeState(ENPCState.Hit);
             health -= 10;
             Invoke(nameof(OnAfterHitState), hitTime);
+            if(health <= 0)
+            OnPlayerDead?.Invoke();
         }
 
         private void OnAfterHitState(){

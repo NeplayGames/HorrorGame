@@ -1,6 +1,8 @@
 using System;
+using HorrorGame.NPC;
 using HorrorGame.Weapon;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 namespace HorrorGame.Player
@@ -11,8 +13,9 @@ namespace HorrorGame.Player
     [SerializeField] private CharacterController characterController;
     [SerializeField] private float speed = 3f;
     [SerializeField] private float mouseRotationSpeed = 5f;
-    [SerializeField, Range(1,5f)] private float jumpValue = 2f;
+    [SerializeField, Range(1, 5f)] private float jumpValue = 2f;
     [SerializeField] private Gun gun;
+    [SerializeField] private NPCController nPCController;
     private Vector3 movementInputValue = Vector2.zero;
     private Vector2 mouseDelta = Vector2.zero;
     private Transform cameraTransform => Camera.main.transform;
@@ -26,6 +29,7 @@ namespace HorrorGame.Player
       Cursor.lockState = CursorLockMode.Locked;
       weaponController = new WeaponController();
       weaponController.SetCurrentHoldingWeapon(gun);
+      nPCController.OnPlayerDead += PlayerIsDead;
     }
     void Update()
     {
@@ -33,12 +37,16 @@ namespace HorrorGame.Player
       Move();
       Rotate();
     }
-
+    private void PlayerIsDead()
+    {
+      print("NPC dead called from player");
+    }
     private void CheckForGroundAndJump()
     {
       if (characterController.isGrounded)
       {
-        if(isJumping){
+        if (isJumping)
+        {
           movementInputValue.y = jumpValue;
           isJumping = false;
         }
@@ -84,6 +92,16 @@ namespace HorrorGame.Player
 
     private void OnSprint() => isSprinting = !isSprinting;
     private void OnJump() => isJumping = true;
+
+    void OnDestroy()
+    {
+      nPCController.OnPlayerDead -= PlayerIsDead;
+    }
+
+    void OnValidate()
+    {
+      Assert.IsNotNull(nPCController, "npc controller is null");
+    }
   }
 
 }
