@@ -1,12 +1,13 @@
+using HorrorGame.NPC;
 using UnityEngine;
 
 namespace HorrorGame.Weapon
 {
-    public class Gun : Weapon
+    public class Gun : AbstractWeapon
     {
-        public override void Shoot(Vector3 direction)
+        public override void OnEnemyHit(NPCController nPCController)
         {
-           print("Gun Shoot");
+            nPCController.GetHit(10);
         }
     }
 }

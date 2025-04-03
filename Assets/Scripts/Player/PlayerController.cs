@@ -14,22 +14,27 @@ namespace HorrorGame.Player
     [SerializeField] private float speed = 3f;
     [SerializeField] private float mouseRotationSpeed = 5f;
     [SerializeField, Range(1, 5f)] private float jumpValue = 2f;
-    [SerializeField] private Gun gun;
-    [SerializeField] private NPCController nPCController;
+    [SerializeField] private int maxHoldingWeapon = 3;
+    [SerializeField] private Transform hand;
+    //[SerializeField] private Gun gun;
+    //[SerializeField] private NPCController nPCController;
     private Vector3 movementInputValue = Vector2.zero;
     private Vector2 mouseDelta = Vector2.zero;
     private Transform cameraTransform => Camera.main.transform;
     private float mouseDeltaY = 0f;
     private WeaponController weaponController;
-
+    private InventoryController inventoryController;
     private bool isSprinting = false;
     private bool isJumping = false;
     void Start()
     {
       Cursor.lockState = CursorLockMode.Locked;
       weaponController = new WeaponController();
-      weaponController.SetCurrentHoldingWeapon(gun);
-      nPCController.OnPlayerDead += PlayerIsDead;
+      inventoryController = new InventoryController(maxHoldingWeapon, weaponController);
+      inventoryController.Attach += AttachWeapon;
+      inventoryController.Detach += DetachWeapon;
+      //weaponController.SetCurrentHoldingWeapon(gun);
+      //nPCController.OnPlayerDead += PlayerIsDead;
     }
     void Update()
     {
@@ -40,6 +45,17 @@ namespace HorrorGame.Player
     private void PlayerIsDead()
     {
       print("NPC dead called from player");
+    }
+
+    private void AttachWeapon(Transform weaponTransform){
+      weaponTransform.SetParent(hand);
+      weaponTransform.localPosition = Vector3.zero;
+      weaponTransform.localRotation = Quaternion.identity;
+      weaponTransform.localScale = Vector3.one;
+    }
+
+    private void DetachWeapon(Transform weaponTransform){
+      weaponTransform.SetParent(null);
     }
     private void CheckForGroundAndJump()
     {
@@ -73,6 +89,14 @@ namespace HorrorGame.Player
     {
       weaponController.Shoot();
     }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+      if(hit.gameObject.TryGetComponent<AbstractWeapon>(out AbstractWeapon weapon)){
+        inventoryController.Pick(weapon);
+      }
+    }
+
     private void OnMovement(InputValue inputValue)
     {
       Vector2 value = inputValue.Get<Vector2>();
@@ -95,12 +119,14 @@ namespace HorrorGame.Player
 
     void OnDestroy()
     {
-      nPCController.OnPlayerDead -= PlayerIsDead;
+      inventoryController.Attach -= AttachWeapon;
+      inventoryController.Detach -= DetachWeapon;
+      //nPCController.OnPlayerDead -= PlayerIsDead;
     }
 
     void OnValidate()
     {
-      Assert.IsNotNull(nPCController, "npc controller is null");
+      //Assert.IsNotNull(nPCController, "npc controller is null");
     }
   }
 

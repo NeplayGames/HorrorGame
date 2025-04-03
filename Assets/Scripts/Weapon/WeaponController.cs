@@ -4,13 +4,15 @@ namespace HorrorGame.Weapon
 {
     public class WeaponController
     {
-        private Weapon currentHoldingWeapon;
+        private AbstractWeapon currentHoldingWeapon;
         public void Shoot(){
-            Vector3 direction = Camera.main.ScreenToWorldPoint(new Vector3(Screen.height /2 , Screen.width / 2, 0));
-            currentHoldingWeapon?.Shoot(direction);
+            currentHoldingWeapon?.Shoot();
         }
 
-        public void SetCurrentHoldingWeapon(Weapon weapon){
+        public void SetCurrentHoldingWeapon(AbstractWeapon weapon){
+            if(currentHoldingWeapon != null){
+                currentHoldingWeapon.gameObject.SetActive(false);
+            }
             currentHoldingWeapon = weapon;
         }
     }

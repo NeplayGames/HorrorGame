@@ -20,17 +20,14 @@ namespace HorrorGame.NPC
 
         // Update is called once per frame
         void Update()
-        {
-            if(Input.GetMouseButtonDown(0)){
-                GetHit();
-            }   
+        { 
             nPCStateMachine.RunState(); 
         }
 
-        private void GetHit()
+        public void GetHit(int damage)
         {
             nPCStateMachine.ChangeState(ENPCState.Hit);
-            health -= 10;
+            health -= damage;
             Invoke(nameof(OnAfterHitState), hitTime);
             if(health <= 0)
             OnPlayerDead?.Invoke();
