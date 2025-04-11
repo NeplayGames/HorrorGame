@@ -1,4 +1,5 @@
 using HorrorGame.NPC;
+using HorrorGame.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,9 +32,8 @@ namespace HorrorGame.NPC
         }
 
         private void GotoAPoint()
-        {
-            Vector3 point = Random.insideUnitSphere * 5;
-            this.navMeshAgent.SetDestination(point);
+        {          
+            this.navMeshAgent.SetDestination(Utilities.GetPointInsideNavmesh());
         }
     }
 }

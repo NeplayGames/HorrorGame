@@ -11,7 +11,7 @@ namespace HorrorGame.NPC
         public float hitTime = 2;
         private NPCStateMachine nPCStateMachine;
 
-        public event Action OnPlayerDead;
+        public event Action<NPCController> OnPlayerDead;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -30,7 +30,7 @@ namespace HorrorGame.NPC
             health -= damage;
             Invoke(nameof(OnAfterHitState), hitTime);
             if(health <= 0)
-            OnPlayerDead?.Invoke();
+            OnPlayerDead?.Invoke(this);
         }
 
         private void OnAfterHitState(){

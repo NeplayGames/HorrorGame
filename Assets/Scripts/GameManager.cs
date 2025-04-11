@@ -6,6 +6,8 @@ namespace HorrorGame
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private NPCController nPCController;
+        [SerializeField, Range(4, 100)] private int npcCount = 10;
+        private NPCManager nPCManager;
         public static GameManager Instance;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -18,7 +20,7 @@ namespace HorrorGame
             {
                 Destroy(this.gameObject);
             }
-            nPCController.OnPlayerDead += OnPlayerDead;
+            nPCManager = new(nPCController, npcCount);
         }
 
         void Update()
@@ -29,13 +31,8 @@ namespace HorrorGame
             // }
         }
 
-        public void OnPlayerDead(){
-            print("The player is dead");
-        }
-
         void OnDestroy()
         {
-            nPCController.OnPlayerDead -= OnPlayerDead;
         }
     }
 
